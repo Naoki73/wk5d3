@@ -8,13 +8,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from .authentication.routes import auth
-import os
+
 
 
 
 
 app = Flask(__name__)
-app.debug = True
 app.config.from_object(Config)
 
 db.init_app(app)
