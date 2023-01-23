@@ -12,8 +12,6 @@ def index():
 
 @app.route('/pokemon', methods=["GET", "POST"])
 def pokemon():
-    addpokemon = Pokemon()
-    print(request.method)
     if request.method == "POST":
         name = addpokemon.name.data
         ability = addpokemon.ability.data
