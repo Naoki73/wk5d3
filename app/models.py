@@ -3,7 +3,9 @@ from datetime import datetime
 from flask_login import UserMixin
 
 
+#Come up with my idea of how I want my model to work to begin with, and make it simple
 
+#Watch shoha's lecture on join tables
 db = SQLAlchemy()
 
 
@@ -19,6 +21,9 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
+    pokedex = db.relationship("Pokedex", lazy=True)
+    
+   
 
     def __init__(self, username, first_name, last_name, email, password):
         self.username = username
@@ -27,9 +32,16 @@ class User(db.Model, UserMixin):
         self.email = email
         self.password = password
 
+    
+
     def saveToDB(self):
         db.session.add(self)
         db.session.commit()
+
+    def load_user(id):
+        return User(id, 'Sample User')
+
+
         
 class Pokemon(db.Model):
     pokemon_id = db.Column(db.Integer, primary_key=True)
@@ -39,17 +51,32 @@ class Pokemon(db.Model):
     Base_ATK = db.Column(db.Integer, nullable=False)
     Base_HP = db.Column(db.Integer, nullable=False)
     Base_DEF = db.Column(db.Integer, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False )
+    Pokedex = db.relationship("Pokedex", lazy=True)
 
-    def __init__(self, name, ability, Front_Shiny, Base_ATK, Base_HP, Base_DEF, user_id):
+
+    def __init__(self, name, ability, Front_Shiny, Base_ATK, Base_HP, Base_DEF):
         self.name = name
         self.ability = ability
         self.Front_Shiny = Front_Shiny
         self.Base_ATK = Base_ATK
         self.Base_HP = Base_HP
         self.Base_DEF = Base_DEF
-        self.user_id = user_id
 
     def saveToDB(self):
         db.session.add(self)
         db.session.commit()
+
+
+class Pokedex(db.Model):
+    pokedex_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    pokemon_id = db.Column (db.Integer, db.ForeignKey('pokemon.pokemon_id'), nullable= False)
+    User = db.relationship("User", lazy=True)
+    Pokemon = db.relationship("Pokemon", lazy=True)
+
+    def savetoDB(self):
+        db.session.add(self)
+        db.session.commit()
+    
+
+

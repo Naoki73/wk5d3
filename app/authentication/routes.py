@@ -4,6 +4,7 @@ from .forms import SignupForm, LoginForm
 from flask_login import login_user, logout_user, login_required, current_user
 
 
+
 auth = Blueprint('auth', __name__, template_folder = 'auth-templates')
 
 @auth.route('/signup', methods = ['GET', 'POST'])
@@ -59,6 +60,21 @@ def login():
 def logoutRoute():
     logout_user()
     return redirect(url_for('auth.login'))
+
+# @auth.route("/catch_pokemon", methods=["POST"])
+# @login_required
+# def catch_pokemon_route():
+#     pokemon_name = request.form["pokemon_name"]
+#     user_id = current_user.id
+#     catch_pokemon(pokemon_name, user_id)
+#     return redirect(url_for("home"))
+
+# @auth.route('/profile')
+# @login_required
+# def profile():
+#     user_id = current_user.id
+#     collection = User.query.filter_by(id=user_id).first().pokemons
+#     return render_template('profile.html', collection=collection)
 
 
 
