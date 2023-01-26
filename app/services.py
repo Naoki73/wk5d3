@@ -19,7 +19,7 @@ def findpokemon(pokemon):
         pokemon_dict["Base_DEF"] = my_dict["stats"][2]["base_stat"]
         return pokemon_dict
     else:
-        return "The pokemon you're looking for does not exist."
+        raise Exception("The pokemon you're looking for does not exist.")
 
 
 

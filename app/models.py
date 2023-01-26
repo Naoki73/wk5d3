@@ -66,6 +66,10 @@ class Pokemon(db.Model):
         db.session.add(self)
         db.session.commit()
 
+    def deleteFromDB(self):
+        db.session.delete(self)
+        db.session.commit()
+
 
 class Pokedex(db.Model):
     pokedex_id = db.Column(db.Integer, primary_key=True)

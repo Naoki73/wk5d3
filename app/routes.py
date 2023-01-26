@@ -24,6 +24,11 @@ def pokemon():
         new_pokemon = Pokemon(pokemon_data["Name"], pokemon_data["Ability"], pokemon_data["Front_Shiny"], pokemon_data["Base_ATK"], pokemon_data["Base_HP"], pokemon_data["Base_DEF"])
         new_pokemon.saveToDB()
 
+        if request.form.get('catch'):
+            pokemon_entry = Pokedex(id=current_user.id, pokemon_id=new_pokemon.pokemon_id)
+            pokemon_entry.saveToDB()
+            return redirect(url_for('profile'))
+
         if request.form.get('catch'):  
             return redirect(url_for('pokemon'))
 
