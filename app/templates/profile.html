@@ -8,8 +8,9 @@
     <h1>Welcome, {{ current_user.username }}</h1>
     <h2>Your Pokedex</h2>
     <ul>
-    {% for pokemon in current_user.pokedex %}
-        <li>{{ pokemon.Pokemon.name }}</li>
+    {% for pokemon_id in user_pokedex %}
+        <!-- <li>{{ pokemon.Pokemon.name }}</li> -->
+        <li>{{ user_pokedex.user_id }} </li>
     {% endfor %}
     </ul>
 

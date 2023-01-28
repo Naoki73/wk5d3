@@ -2,8 +2,10 @@ from flask import Flask, redirect, url_for, render_template, request, jsonify
 import requests as r
 from app import app
 from app.services import findpokemon
-from .models import Pokemon, User, user_pokedex
+from app.models import Pokemon, User, user_pokedex
 from flask_login import login_user, logout_user, login_required, current_user
+
+
 
 
 @app.route('/')
@@ -31,8 +33,8 @@ def pokemon():
 
 
 
-        # pokemon = Pokemon.query.filter_by(name=pokemon_name).first()
-        # current_user.catch_pokemon(pokemon)
+        pokemon = Pokemon.query.filter_by(name=pokemon_name).first()
+        current_user.catch_pokemon(pokemon)
 
         return render_template("pokemon_data.html", pokemon_data = pokemon_data)
     else:
@@ -47,8 +49,8 @@ def add_to_pokedex():
     pokemon_id = request.form['name']
     print("test")
 
-    pokemon = Pokemon.query.filter_by(name=)
-    current_user.catch_pokemon(pokemon)
+    # pokemon = Pokemon.query.filter_by(name=)
+    # current_user.catch_pokemon(pokemon)
 
     # pokemon_entry = Pokedex(id=current_user.id, pokemon_id=pokemon.pokemon_id)
     # pokemon_entry.saveToDB()
@@ -62,6 +64,18 @@ def add_to_pokedex():
 @app.route("/profile")
 @login_required
 def profile():
-    pokedex_entries = user_pokedex.query.filter_by(id=current_user.id).all()
+    
+    # stmt = select([user_pokedex]).where(user_pokedex.current_user.id == current_user.id)
+    # pokedex_entries = (stmt).fetchall()
+
+    # pokemon = user_pokedex.query.filter_by(name=pokemon_name).all()
+    # current_user.catch_pokemon(pokemon)
+    # pokedex_entries = user_pokedex.query.filter_by(user_id=current_user.id).all()
+    pokedex_entires = User.query\
+        .join(user_pokedex, User.id==user_pokedex.user_id)\
+        .add_columns(User.id, User.username, 
+
     return render_template("profile.html", pokedex_entries=pokedex_entries)
+
+    # return render_template("profile.html", pokedex_entries = pokedex_entries )
  
