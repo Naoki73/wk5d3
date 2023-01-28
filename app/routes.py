@@ -2,7 +2,7 @@ from flask import Flask, redirect, url_for, render_template, request, jsonify
 import requests as r
 from app import app
 from app.services import findpokemon
-from .models import Pokemon, User, Pokedex
+from .models import Pokemon, User
 from flask_login import login_user, logout_user, login_required, current_user
 
 
@@ -24,13 +24,16 @@ def pokemon():
         new_pokemon = Pokemon(pokemon_data["Name"], pokemon_data["Ability"], pokemon_data["Front_Shiny"], pokemon_data["Base_ATK"], pokemon_data["Base_HP"], pokemon_data["Base_DEF"])
         new_pokemon.saveToDB()
 
-        if request.form.get('catch'):
-            pokemon_entry = Pokedex(id=current_user.id, pokemon_id=new_pokemon.pokemon_id)
-            pokemon_entry.saveToDB()
-            return redirect(url_for('profile'))
+        # if request.form.get('catch'):
+        #     pokemon_entry = Pokedex(id=current_user.id, pokemon_id=new_pokemon.pokemon_id)
+        #     pokemon_entry.saveToDB()
+        #     return redirect(url_for('profile'))
 
-        if request.form.get('catch'):  
-            return redirect(url_for('pokemon'))
+        # if request.form.get('catch'):  
+        #     return redirect(url_for('pokemon'))
+
+        pokemon = Pokemon.query.filter_by(name=pokemon_name).first()
+        current_user.catch_pokemon(pokemon)
 
         return render_template("pokemon_data.html", pokemon_data = pokemon_data)
     else:
@@ -42,12 +45,17 @@ def pokemon():
 @login_required
 def add_to_pokedex():
     pokemon_name = request.form['name']
+    print("test")
 
-    pokemon = Pokemon.query.filter_by(name=pokemon_name).first()
+    pokemon = Pokemon.query.filter_by(name='mew').first()
+    current_user.catch_pokemon(pokemon)
 
-    pokemon_entry = Pokedex(id=current_user.id, pokemon_id=pokemon.pokemon_id)
-    pokemon_entry.saveToDB()
+    # pokemon_entry = Pokedex(id=current_user.id, pokemon_id=pokemon.pokemon_id)
+    # pokemon_entry.saveToDB()
     
+
+
+
     return redirect(url_for('profile'))
 
 
